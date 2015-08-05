@@ -322,6 +322,11 @@ class sensu (
   if $purge_config { fail('purge_config is deprecated, set the purge parameter to a hash containing `config => true` instead') }
   if $purge_plugins_dir { fail('purge_plugins_dir is deprecated, set the purge parameter to a hash containing `plugins => true` instead') }
 
+  # sensu-enterprise supercedes sensu-server and sensu-api
+  if ( $enterprise and $api ) or ( $enterprise and $server ) {
+    fail('Sensu Enterprise: sensu-enterprise replaces sensu-server and sensu-api')
+  }
+
   # Ugly hack for notifications, better way?
   # Put here to avoid computing the conditionals for every check
   if $client and $server and $api {
