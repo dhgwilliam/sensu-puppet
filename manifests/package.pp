@@ -33,6 +33,7 @@ class sensu::package {
 
   }
 
+
   package { 'sensu':
     ensure  => $sensu::version,
   }

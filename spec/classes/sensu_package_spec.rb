@@ -106,6 +106,26 @@ describe 'sensu' do
 
             it { should contain_package('sensu').with( :require => nil ) }
           end
+
+          context 'enterprise_repo => true' do
+            context 'valid user & pass' do
+              let(:params) { { 
+                :enterprise => true,
+                :enterprise_user => 'sensu',
+                :enterprise_pass => 'sensu',
+              } }
+              it { should contain_apt__source('sensu').with(
+                :release => 'sensu-enterprise'
+              ) }
+            end
+            context 'invalid user or pass' do
+              let(:params) { { 
+                :enterprise => true,
+                :enterprise_user => 'sensu',
+              } }
+              it { expect(subject).to raise_error(Puppet::Error, /Sensu Enterprise/) }
+            end
+          end
         end
 
         context 'without puppet-apt installed' do
@@ -139,6 +159,27 @@ describe 'sensu' do
           let(:params) { { :install_repo => false } }
           it { should_not contain_yumrepo('sensu') }
           it { should contain_package('sensu').with( :require => nil ) }
+        end
+
+        context 'enterprise_repo => true' do
+          context 'valid user & pass' do
+            let(:params) { { 
+              :enterprise      => true,
+              :enterprise_user => 'sensu',
+              :enterprise_pass => 'sensu',
+            } }
+            it { should contain_yumrepo('sensu').with(
+              :baseurl => 'http://sensu:sensu@enterprise.sensuapp.com/yum/noarch/'
+            ) }
+          end
+
+          context 'invalid user or pass' do 
+            let(:params) { { 
+              :enterprise      => true,
+              :enterprise_user => 'sensu',
+            } }
+            it { expect(subject).to raise_error(Puppet::Error, /Sensu Enterprise repo/) }
+          end
         end
       end
     end

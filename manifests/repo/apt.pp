@@ -18,15 +18,28 @@ class sensu::repo::apt {
     }
 
     if $sensu::repo_source {
-      $url = $sensu::repo_source
+      $url     = $sensu::repo_source
+      $release = 'sensu'
+    } elsif $sensu::enterprise {
+      $se_user = $sensu::enterprise_user
+      $se_pass = $sensu::enterprise_pass
+
+      validate_string($se_user, $se_pass)
+      if $se_user == undef or $se_pass == undef {
+        fail('The Sensu Enterprise repos require both enterprise_user and enterprise_pass to be set')
+      }
+
+      $url = "http://${se_user}:${se_pass}@enterprise.sensuapp.com/apt"
+      $release = 'sensu-enterprise'
     } else {
-      $url = 'http://repos.sensuapp.org/apt'
+      $url     = 'http://repos.sensuapp.org/apt'
+      $release = 'sensu'
     }
 
     apt::source { 'sensu':
       ensure   => $ensure,
       location => $url,
-      release  => 'sensu',
+      release  => $release,
       repos    => $sensu::repo,
       include  => {
         'src' => false,

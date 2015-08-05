@@ -10,7 +10,17 @@ class sensu::repo::yum {
 
   if $sensu::install_repo  {
     if $sensu::repo_source {
-      $url = $sensu::repo_source
+      $url     = $sensu::repo_source
+    } elsif $sensu::enterprise {
+      $se_user = $sensu::enterprise_user
+      $se_pass = $sensu::enterprise_pass
+
+      validate_string($se_user, $se_pass)
+      if $se_user == undef or $se_pass == undef {
+        fail('The Sensu Enterprise repos require both enterprise_user and enterprise_pass to be set')
+      }
+
+      $url = "http://${se_user}:${se_pass}@enterprise.sensuapp.com/yum/noarch/"
     } else {
       $url = $sensu::repo ? {
         'unstable'  => "http://repos.sensuapp.org/yum-unstable/el/\$basearch/",
@@ -18,13 +28,15 @@ class sensu::repo::yum {
       }
     }
 
+    $package_name = $::sensu::package::package_name
+
     yumrepo { 'sensu':
       enabled  => 1,
       baseurl  => $url,
       gpgcheck => 0,
       name     => 'sensu',
       descr    => 'sensu',
-      before   => Package['sensu'],
+      before   => Package[$package_name],
     }
   }
 

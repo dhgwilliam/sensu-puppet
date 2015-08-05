@@ -27,6 +27,11 @@
 #   Default: true
 #   Valid values: true, false
 #
+# [*enterprise_repo*]
+#   Boolean.  Whether or not to use the enterprise repo
+#   Default: false
+#   Valid values: true, false
+#
 # [*repo*]
 #   String.  Which sensu repo to install
 #   Default: main
@@ -242,6 +247,9 @@ class sensu (
   $sensu_plugin_provider       = undef,
   $sensu_plugin_version        = 'absent',
   $install_repo                = true,
+  $enterprise                  = false,
+  $enterprise_user             = undef,
+  $enterprise_pass             = undef,
   $repo                        = 'main',
   $repo_source                 = undef,
   $repo_key_id                 = '8911D8FF37778F24B4E726A218609E3D7580C77F',
@@ -300,7 +308,7 @@ class sensu (
 
 ){
 
-  validate_bool($client, $server, $api, $install_repo, $purge_config, $safe_mode, $manage_services, $rabbitmq_reconnect_on_error, $redis_reconnect_on_error, $hasrestart)
+  validate_bool($client, $server, $api, $install_repo, $enterprise, $purge_config, $safe_mode, $manage_services, $rabbitmq_reconnect_on_error, $redis_reconnect_on_error, $hasrestart)
 
   validate_re($repo, ['^main$', '^unstable$'], "Repo must be 'main' or 'unstable'.  Found: ${repo}")
   validate_re($version, ['^absent$', '^installed$', '^latest$', '^present$', '^[\d\.\-]+$'], "Invalid package version: ${version}")
