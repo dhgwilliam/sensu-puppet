@@ -36,6 +36,8 @@ class sensu::repo::apt {
       $release = 'sensu'
     }
 
+    $package_name = $::sensu::package::package_name
+
     apt::source { 'sensu':
       ensure   => $ensure,
       location => $url,
@@ -48,7 +50,7 @@ class sensu::repo::apt {
         'id'     => $sensu::repo_key_id,
         'source' => $sensu::repo_key_source,
       },
-      before   => Package['sensu'],
+      before   => Package[$package_name],
     }
 
   } else {

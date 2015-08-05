@@ -110,7 +110,7 @@ describe 'sensu' do
           context 'enterprise_repo => true' do
             context 'valid user & pass' do
               let(:params) { { 
-                :enterprise => true,
+                :enterprise      => true,
                 :enterprise_user => 'sensu',
                 :enterprise_pass => 'sensu',
               } }
@@ -120,7 +120,7 @@ describe 'sensu' do
             end
             context 'invalid user or pass' do
               let(:params) { { 
-                :enterprise => true,
+                :enterprise      => true,
                 :enterprise_user => 'sensu',
               } }
               it { expect(subject).to raise_error(Puppet::Error, /Sensu Enterprise/) }
