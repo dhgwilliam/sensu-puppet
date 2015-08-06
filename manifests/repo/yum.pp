@@ -20,7 +20,9 @@ class sensu::repo::yum {
         fail('The Sensu Enterprise repos require both enterprise_user and enterprise_pass to be set')
       }
 
-      $url = "http://${se_user}:${se_pass}@enterprise.sensuapp.com/yum/noarch/"
+      $base_url       = "http://${se_user}:${se_pass}@enterprise.sensuapp.com/yum"
+      $url            = "${base_url}/noarch/"
+      $dashboard_repo = "${base_url}/\$basearch/"
     } else {
       $url = $sensu::repo ? {
         'unstable'  => "http://repos.sensuapp.org/yum-unstable/el/\$basearch/",
@@ -29,14 +31,26 @@ class sensu::repo::yum {
     }
 
     $package_name = $::sensu::package::package_name
+    $repo         = $::sensu::package::repo
 
-    yumrepo { 'sensu':
+    yumrepo { $repo:
       enabled  => 1,
       baseurl  => $url,
       gpgcheck => 0,
-      name     => 'sensu',
-      descr    => 'sensu',
+      name     => $repo,
+      descr    => $repo,
       before   => Package[$package_name],
+    }
+
+    if $::sensu::enterprise and $::sensu::enterprise_dashboard {
+      yumrepo { 'sensu-enterprise-dashboard':
+        enabled  => 1,
+        baseurl  => $dashboard_repo,
+        gpgcheck => 0,
+        name     => 'sensu-enterprise-dashboard',
+        descr    => 'sensu-enterprise-dashboard',
+        before   => Package['sensu-enterprise-dashboard'],
+      }
     }
   }
 

@@ -14,7 +14,7 @@ class sensu::package {
       class { '::sensu::repo::apt': }
       if $sensu::install_repo {
         include ::apt
-        $repo_require = Apt::Source['sensu']
+        $repo_require = Apt::Source[$repo]
       } else {
         $repo_require = undef
       }
@@ -23,7 +23,7 @@ class sensu::package {
     'RedHat': {
       class { '::sensu::repo::yum': }
       if $sensu::install_repo {
-        $repo_require = Yumrepo['sensu']
+        $repo_require = Yumrepo[$repo]
       } else {
         $repo_require = undef
       }

@@ -19,6 +19,7 @@ class sensu::repo::apt {
 
     if $sensu::repo_source {
       $url     = $sensu::repo_source
+      $repo    = 'sensu'
       $release = 'sensu'
     } elsif $sensu::enterprise {
       $se_user = $sensu::enterprise_user
@@ -29,16 +30,18 @@ class sensu::repo::apt {
         fail('The Sensu Enterprise repos require both enterprise_user and enterprise_pass to be set')
       }
 
-      $url = "http://${se_user}:${se_pass}@enterprise.sensuapp.com/apt"
+      $url     = "http://${se_user}:${se_pass}@enterprise.sensuapp.com/apt"
+      $repo    = 'sensu-enterprise'
       $release = 'sensu-enterprise'
     } else {
       $url     = 'http://repos.sensuapp.org/apt'
+      $repo    = 'sensu'
       $release = 'sensu'
     }
 
     $package_name = $::sensu::package::package_name
 
-    apt::source { 'sensu':
+    apt::source { $repo:
       ensure   => $ensure,
       location => $url,
       release  => $release,
