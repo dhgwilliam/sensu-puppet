@@ -3,17 +3,10 @@
 # Installs the Sensu Enterprise Dashboard
 class sensu::enterprise::dashboard {
 
-  if $caller_module_name != $module_name {
-    fail("Use of private class ${name} by ${caller_module_name}")
-  }
+  anchor { 'sensu::enterprise::dashboard::begin': } ->
+  class { '::sensu::enterprise::dashboard::package': } ->
+  class { '::sensu::enterprise::dashboard::config': } ->
+  class { '::sensu::enterprise::dashboard::service': } ->
+  anchor { 'sensu::enterprise::dashboard::end': }
 
-  if $::sensu::enterprise and $::sensu::enterprise_dashboard {
-    $ensure = 'present'
-  } else {
-    $ensure = 'absent'
-  }
-
-  package { 'sensu-enterprise-dashboard':
-    ensure => $ensure,
-  }
 }
