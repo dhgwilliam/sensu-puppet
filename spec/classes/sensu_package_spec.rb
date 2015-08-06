@@ -123,7 +123,7 @@ describe 'sensu' do
                 :enterprise      => true,
                 :enterprise_user => 'sensu',
               } }
-              it { expect(subject).to raise_error(Puppet::Error, /Sensu Enterprise/) }
+              it { expect { should raise_error(Puppet::Error, /Sensu Enterprise/) } }
             end
           end
         end
@@ -178,7 +178,7 @@ describe 'sensu' do
               :enterprise      => true,
               :enterprise_user => 'sensu',
             } }
-            it { expect(subject).to raise_error(Puppet::Error, /Sensu Enterprise repo/) }
+            it { expect { should raise_error(Puppet::Error, /Sensu Enterprise repo/) } }
           end
 
           context 'enterprise_dashboard => true' do

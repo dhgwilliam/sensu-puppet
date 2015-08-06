@@ -30,12 +30,12 @@ describe 'sensu', :type => :class do
 
   context 'fail if :enterprise => true AND :server => true' do
     let(:params) { { :enterprise => true, :server => true } }
-    it { expect(subject).to raise_error(Puppet::Error, /sensu-server/) }
+    it { expect { should create_class('sensu') }.to raise_error(Puppet::Error, /sensu-server/) }
   end
 
   context 'fail if :enterprise => true AND :api => true' do
     let(:params) { { :enterprise => true, :api => true } }
-    it { expect(subject).to raise_error(Puppet::Error, /sensu-api/) }
+    it { expect { should create_class('sensu') }.to raise_error(Puppet::Error, /sensu-api/) }
   end
 end
 
