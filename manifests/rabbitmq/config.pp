@@ -14,19 +14,13 @@ class sensu::rabbitmq::config {
     $ensure = 'present'
   }
 
-  if $::sensu::enterprise {
-    $package_name = [ 'sensu-enterprise', 'sensu' ]
-  } else {
-    $package_name = 'sensu'
-  }
-
   if $sensu::rabbitmq_ssl_cert_chain {
     file { '/etc/sensu/ssl':
       ensure  => directory,
       owner   => 'sensu',
       group   => 'sensu',
       mode    => '0755',
-      require => Package[$package_name],
+      require => Package['sensu'],
     }
 
     # if provided a cert chain, and its a puppet:// URI, source file form the
