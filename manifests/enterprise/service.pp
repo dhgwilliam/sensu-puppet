@@ -1,0 +1,1 @@
+class sensu::enterprise::service {}

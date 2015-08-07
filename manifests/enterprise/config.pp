@@ -1,0 +1,2 @@
+class sensu::enterprise::config {
+}

@@ -14,7 +14,7 @@ class sensu::package {
       class { '::sensu::repo::apt': }
       if $sensu::install_repo {
         include ::apt
-        $repo_require = Apt::Source[$repo]
+        $repo_require = Apt::Source['sensu']
       } else {
         $repo_require = undef
       }
@@ -23,7 +23,7 @@ class sensu::package {
     'RedHat': {
       class { '::sensu::repo::yum': }
       if $sensu::install_repo {
-        $repo_require = Yumrepo[$repo]
+        $repo_require = Yumrepo['sensu']
       } else {
         $repo_require = undef
       }
@@ -33,7 +33,10 @@ class sensu::package {
 
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> refactor
   package { 'sensu':
     ensure  => $sensu::version,
   }
@@ -96,6 +99,7 @@ class sensu::package {
     mode    => '0555',
     owner   => 'sensu',
     group   => 'sensu',
+<<<<<<< HEAD
     purge   => $sensu::_purge_extensions,
     recurse => true,
     force   => true,
@@ -110,6 +114,8 @@ class sensu::package {
     purge   => $sensu::_purge_mutators,
     recurse => true,
     force   => true,
+=======
+>>>>>>> refactor
     require => Package['sensu'],
   }
 
