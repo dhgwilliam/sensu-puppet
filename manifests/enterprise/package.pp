@@ -34,7 +34,7 @@ class sensu::enterprise::package {
   }
 
   package { 'sensu-enterprise':
-    ensure  => $sensu::enterprise::version,
+    ensure  => $sensu::enterprise_version,
   }
 
   file { '/etc/default/sensu-enterprise':
