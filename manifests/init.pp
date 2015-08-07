@@ -399,10 +399,12 @@ class sensu (
   # transitioning to purged config and stopping/disabling services
   anchor { 'sensu::begin': } ->
   class { '::sensu::package': } ->
+  class { '::sensu::enterprise::package': } ->
   class { '::sensu::rabbitmq::config': } ->
   class { '::sensu::api::config': } ->
   class { '::sensu::redis::config': } ->
   class { '::sensu::client::config': } ->
+  class { '::sensu::enterprise::config': } ->
   class { '::sensu::client::service':
     hasrestart => $hasrestart,
   } ->
@@ -412,7 +414,8 @@ class sensu (
   class { '::sensu::server::service':
     hasrestart => $hasrestart,
   } ->
-  class { '::sensu::enterprise': } ->
+  class { '::sensu::enterprise::service': } ->
+  class { '::sensu::enterprise::dashboard': } ->
   anchor {'sensu::end': }
 
   if $plugins_dir {
