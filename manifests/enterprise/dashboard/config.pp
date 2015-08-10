@@ -15,4 +15,8 @@ class sensu::enterprise::dashboard::config {
     group  => 'sensu',
     mode   => '0440',
   }
+
+  sensu_enterprise_dashboard_config { $::fqdn:
+    ensure => $ensure,
+  }
 }
