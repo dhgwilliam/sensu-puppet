@@ -14,7 +14,7 @@ define sensu::plugins_dir (
       recurse => $recurse,
       purge   => $purge,
       force   => $force,
-      require => Package[$::sensu::package::package_name],
+      require => Package['sensu'],
     }
   }
 }
