@@ -33,10 +33,6 @@ class sensu::package {
 
   }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> refactor
   package { 'sensu':
     ensure  => $sensu::version,
   }
@@ -99,7 +95,6 @@ class sensu::package {
     mode    => '0555',
     owner   => 'sensu',
     group   => 'sensu',
-<<<<<<< HEAD
     purge   => $sensu::_purge_extensions,
     recurse => true,
     force   => true,
@@ -114,8 +109,6 @@ class sensu::package {
     purge   => $sensu::_purge_mutators,
     recurse => true,
     force   => true,
-=======
->>>>>>> refactor
     require => Package['sensu'],
   }
 
