@@ -1,6 +1,6 @@
 require 'puppet/parameter/boolean'
 
-Puppet::Type.newtype(:sensu_enterprise_dashboard_config) do
+Puppet::Type.newtype(:sensu_enterprise_dashboard_api_config) do
   @doc = ""
 
   def initialize(*args)
@@ -25,6 +25,11 @@ Puppet::Type.newtype(:sensu_enterprise_dashboard_config) do
 
   newparam(:name) do
     desc "The name of the Sensu API (used elsewhere as the datacenter name)."
+  end
+
+  newparam(:base_path) do
+    desc "The base path to the client config file"
+    defaultto '/etc/sensu/'
   end
 
   newproperty(:host) do

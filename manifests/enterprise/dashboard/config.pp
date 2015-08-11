@@ -17,6 +17,14 @@ class sensu::enterprise::dashboard::config {
   }
 
   sensu_enterprise_dashboard_config { $::fqdn:
-    ensure => $ensure,
+    ensure    => $ensure,
+    base_path => $::sensu::enterprise_dashboard_base_path,
+    host      => $::sensu::enterprise_dashboard_host,
+    port      => $::sensu::enterprise_dashboard_port,
+    refresh   => $::sensu::enterprise_dashboard_refresh,
+    user      => $::sensu::enterprise_dashboard_user,
+    pass      => $::sensu::enterprise_dashboard_pass,
+    github    => $::sensu::enterprise_dashboard_github,
+    ldap      => $::sensu::enterprise_dashboard_ldap,
   }
 }

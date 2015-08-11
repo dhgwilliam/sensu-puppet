@@ -25,6 +25,11 @@ Puppet::Type.newtype(:sensu_enterprise_dashboard_config) do
     desc "This value has no effect, set it to what ever you want."
   end
 
+  newparam(:base_path) do
+    desc "The base path to the client config file"
+    defaultto '/etc/sensu/'
+  end
+
   newproperty(:host) do
     desc "The hostname or IP address on which Sensu Enterprise Dashboard will listen on."
 
