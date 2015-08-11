@@ -55,7 +55,7 @@ Puppet::Type.newtype(:sensu_enterprise_dashboard_config) do
     desc "A hash of GitHub authentication attributes to enable GitHub authentication via OAuth. Overrides simple authentication."
 
     validate do |value|
-      unless value.to_h.is_a?(Hash)
+      unless value.respond_to?(:to_hash)
         raise ArgumentError, "Sensu Enterprise Dashboard github config must be a Hash"
       end
     end
@@ -65,7 +65,7 @@ Puppet::Type.newtype(:sensu_enterprise_dashboard_config) do
     desc "A hash of Lightweight Directory Access Protocol (LDAP) authentication attributes to enable LDAP authentication. Overrides simple authentication."
 
     validate do |value|
-      unless value.to_h.is_a?(Hash)
+      unless value.respond_to?(:to_hash)
         raise ArgumentError, "Sensu Enterprise Dashboard LDAP config must be a Hash"
       end
     end

@@ -131,7 +131,7 @@ Puppet::Type.type(:sensu_enterprise_dashboard_config).provide(:json) do
   #
   # Returns nothing.
   def github=(value)
-    conf['dashboard']['github'] = value.to_h
+    conf['dashboard']['github'] = value.to_hash
   end
 
   # Public: Retrieve the LDAP config
@@ -145,6 +145,6 @@ Puppet::Type.type(:sensu_enterprise_dashboard_config).provide(:json) do
   #
   # Returns nothing.
   def ldap=(value)
-    conf['dashboard']['ldap'] = value.to_h
+    conf['dashboard']['ldap'] = value.to_hash
   end
 end
