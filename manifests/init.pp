@@ -404,7 +404,6 @@ class sensu (
   class { '::sensu::api::config': } ->
   class { '::sensu::redis::config': } ->
   class { '::sensu::client::config': } ->
-  class { '::sensu::enterprise::config': } ->
   class { '::sensu::client::service':
     hasrestart => $hasrestart,
   } ->
