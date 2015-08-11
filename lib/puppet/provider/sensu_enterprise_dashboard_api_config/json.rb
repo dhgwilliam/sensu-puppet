@@ -3,14 +3,14 @@ require 'json' if Puppet.features.json?
 require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..',
                                    'puppet_x', 'sensu', 'provider_create.rb'))
 
-Puppet::Type.type(:sensu_api_config).provide(:json) do
+Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
   confine :feature => :json
   include PuppetX::Sensu::ProviderCreate
 
-  # Internal: Retrieve the current contents of /etc/sensu/config.json.
+  # Internal: Retrieve the current contents of /etc/sensu/dashboard.json.
   #
   # Returns a Hash representation of the JSON structure in
-  # /etc/sensu/config.json or an empty Hash if the file can not be read.
+  # /etc/sensu/dashboard.json or an empty Hash if the file can not be read.
   def conf
     begin
       @conf ||= JSON.parse(File.read(config_file))
@@ -19,7 +19,7 @@ Puppet::Type.type(:sensu_api_config).provide(:json) do
     end
   end
 
-  # Public: Save changes to the API section of /etc/sensu/config.json to disk.
+  # Public: Save changes to the API section of /etc/sensu/dashboard.json to disk.
   #
   # Returns nothing.
   def flush
@@ -30,7 +30,6 @@ Puppet::Type.type(:sensu_api_config).provide(:json) do
 
   def pre_create
     conf['sensu'] = {}
-    conf['dashboard'] = {}
   end
 
   # Public: Remove the API configuration section.
@@ -38,7 +37,6 @@ Puppet::Type.type(:sensu_api_config).provide(:json) do
   # Returns nothing.
   def destroy
     conf.delete 'sensu'
-    conf.delete 'dashboard'
   end
 
   # Public: Determine if the API configuration section is present.
@@ -46,67 +44,80 @@ Puppet::Type.type(:sensu_api_config).provide(:json) do
   # Returns a Boolean, true if present, false if absent.
   def exists?
     conf.has_key? 'sensu'
-    conf.has_key? 'dashboard'
-  end
-
-  # Public: Retrieve the port number that the API is configured to listen on.
-  #
-  # Returns the String port number.
-  def port
-    conf['dashboard']['port'].to_s
   end
 
   def config_file
     "#{resource[:base_path]}/dashboard.json"
   end
 
+  def host
+    conf['sensu']['host']
+  end
+
+  def host=(value)
+    conf['sensu']['host'] = value
+  end
+
+  # Public: Retrieve the port number that the API is configured to listen on.
+  #
+  # Returns the String port number.
+  def port
+    conf['sensu']['port'].to_s
+  end
+
   # Public: Set the port that the API should listen on.
   #
   # Returns nothing.
   def port=(value)
-    conf['dashboard']['port'] = value.to_i
+    conf['sensu']['port'] = value.to_i
   end
 
-  # Public: Retrieve the hostname that the API is configured to listen on.
-  #
-  # Returns the String hostname.
-  def host
-    conf['dashboard']['host']
+  def ssl
+    conf['sensu']['ssl']
   end
 
-  # Public: Set the hostname that the API should listen on.
-  #
-  # Returns nothing.
-  def host=(value)
-    conf['dashboard']['host'] = value
+  def ssl=(value)
+    conf['sensu']['ssl'] = value
   end
 
-  # Public: Retrieve the api username
-  #
-  # Returns the String hostname.
+  def insecure
+    conf['sensu']['insecure']
+  end
+
+  def insecure=(value)
+    conf['sensu']['insecure'] = value
+  end
+
+  def path
+    conf['sensu']['path']
+  end
+
+  def path=(value)
+    conf['sensu']['path'] = value
+  end
+
+  def timeout
+    conf['sensu']['timeout'].to_s
+  end
+
+  def timeout=(value)
+    conf['sensu']['timeout'] = value.to_i
+  end
+
   def user
-    conf['dashboard']['user']
+    conf['sensu']['user']
   end
 
-  # Public: Set the api user
-  #
-  # Returns nothing.
   def user=(value)
-    conf['dashboard']['user'] = value
+    conf['sensu']['user'] = value
   end
 
-  # Public: Retrieve the password for the api
-  #
-  # Returns the String password.
-  def password
-    conf['dashboard']['password']
+  def pass
+    conf['sensu']['pass']
   end
 
-  # Public: Set the api password
-  #
-  # Returns nothing.
-  def password=(value)
-    conf['dashboard']['password'] = value
+  def pass=(value)
+    conf['sensu']['pass'] = value
   end
 
 end

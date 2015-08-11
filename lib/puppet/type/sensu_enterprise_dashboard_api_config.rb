@@ -1,3 +1,5 @@
+require 'puppet/parameter/boolean'
+
 Puppet::Type.newtype(:sensu_enterprise_dashboard_config) do
   @doc = ""
 
@@ -22,19 +24,56 @@ Puppet::Type.newtype(:sensu_enterprise_dashboard_config) do
   end
 
   newparam(:name) do
-    desc "This value has no effect, set it to what ever you want."
+    desc "The name of the Sensu API (used elsewhere as the datacenter name)."
+  end
+
+  newproperty(:host) do
+    desc "The hostname or IP address of the Sensu API."
+    isrequired
   end
 
   newproperty(:port) do
-    desc "The port that the Sensu API is listening on"
+    desc "The port of the Sensu API."
+
+    newvalues(/[0-9]+/)
 
     defaultto '4567'
   end
 
-  newproperty(:host) do
-    desc "The hostname that the Sensu API is listening on"
+  newproperty(:ssl, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+    desc "Determines whether or not to use the HTTPS protocol."
 
-    defaultto 'localhost'
+    defaultto false
+  end
+
+  newproperty(:insecure, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+    desc "Determines whether or not to accept an insecure SSL certificate."
+
+    defaultto false
+  end
+
+  newproperty(:path) do
+    desc "The path of the Sensu API. Leave empty unless your Sensu API is not mounted to /."
+  end
+
+  newproperty(:timeout) do
+    desc "The timeout for the Sensu API, in seconds."
+
+    newvalues(/[0-9]+/)
+
+    defaultto '5'
+  end
+
+  newproperty(:user) do
+    desc "The username of the Sensu API. Leave empty for no authentication."
+
+    newvalues(/.+/)
+  end
+
+  newproperty(:pass) do
+    desc "The password of the Sensu API. Leave empty for no authentication."
+
+    newvalues(/.+/)
   end
 
   autorequire(:package) do
