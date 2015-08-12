@@ -62,8 +62,9 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
   #
   # Returns a Boolean, true if present, false if absent.
   def exists?
-    sensu.each_with_object(false) do |api, memo|
+    sensu.inject(false) do |memo, api|
       memo = true if api['name'] == name
+      memo
     end
   end
 
