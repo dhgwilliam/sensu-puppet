@@ -20,7 +20,8 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
   end
 
   def sensu
-    @sensu ||= @conf['sensu']
+    return @sensu if @sensu
+    @conf['sensu'] || []
   end
 
   def name
