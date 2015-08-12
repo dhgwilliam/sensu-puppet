@@ -7,6 +7,10 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
   confine :feature => :json
   include PuppetX::Sensu::ProviderCreate
 
+  def config_file
+    "#{resource[:base_path]}/dashboard.json"
+  end
+
   # Internal: Retrieve the current contents of /etc/sensu/dashboard.json.
   #
   # Returns a Hash representation of the JSON structure in
@@ -21,7 +25,7 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
 
   def sensu
     return @sensu if @sensu
-    @conf['sensu'] || []
+    conf['sensu'] || []
   end
 
   def name
@@ -61,10 +65,6 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
     sensu.each_with_object(false) do |api, memo|
       memo = true if api['name'] == name
     end
-  end
-
-  def config_file
-    "#{resource[:base_path]}/dashboard.json"
   end
 
   def host
