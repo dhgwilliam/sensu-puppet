@@ -19,31 +19,47 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
     end
   end
 
+  def sensu
+    @sensu ||= @conf['sensu']
+  end
+
+  def name
+    resource[:name]
+  end
+
+  def api
+    sensu[name]
+  end
+
   # Public: Save changes to the API section of /etc/sensu/dashboard.json to disk.
   #
   # Returns nothing.
   def flush
+    @conf['sensu'] = @sensu
+
     File.open(config_file, 'w') do |f|
       f.puts JSON.pretty_generate(@conf)
     end
   end
 
   def pre_create
-    conf['sensu'] = {}
+    conf['sensu'] = []
   end
 
   # Public: Remove the API configuration section.
   #
   # Returns nothing.
   def destroy
-    conf.delete 'sensu'
+    sensu.reject! { |api| api['name'] == name }
   end
 
   # Public: Determine if the API configuration section is present.
   #
   # Returns a Boolean, true if present, false if absent.
   def exists?
-    conf.has_key? 'sensu'
+    sensu.each_with_object(false) do |api, memo|
+      memo = true if api['name'] == name
+    end
   end
 
   def config_file
@@ -51,73 +67,72 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
   end
 
   def host
-    conf['sensu']['host']
+    api['host']
   end
 
   def host=(value)
-    conf['sensu']['host'] = value
+    api['host'] = value
   end
 
   # Public: Retrieve the port number that the API is configured to listen on.
   #
   # Returns the String port number.
   def port
-    conf['sensu']['port'].to_s
+    api['port'].to_s
   end
 
   # Public: Set the port that the API should listen on.
   #
   # Returns nothing.
   def port=(value)
-    conf['sensu']['port'] = value.to_i
+    api['port'] = value.to_i
   end
 
   def ssl
-    conf['sensu']['ssl']
+    api['ssl']
   end
 
   def ssl=(value)
-    conf['sensu']['ssl'] = value
+    api['ssl'] = value
   end
 
   def insecure
-    conf['sensu']['insecure']
+    api['insecure']
   end
 
   def insecure=(value)
-    conf['sensu']['insecure'] = value
+    api['insecure'] = value
   end
 
   def path
-    conf['sensu']['path']
+    api['path']
   end
 
   def path=(value)
-    conf['sensu']['path'] = value
+    api['path'] = value
   end
 
   def timeout
-    conf['sensu']['timeout'].to_s
+    api['timeout'].to_s
   end
 
   def timeout=(value)
-    conf['sensu']['timeout'] = value.to_i
+    api['timeout'] = value.to_i
   end
 
   def user
-    conf['sensu']['user']
+    api['user']
   end
 
   def user=(value)
-    conf['sensu']['user'] = value
+    api['user'] = value
   end
 
   def pass
-    conf['sensu']['pass']
+    api['pass']
   end
 
   def pass=(value)
-    conf['sensu']['pass'] = value
+    api['pass'] = value
   end
-
 end
