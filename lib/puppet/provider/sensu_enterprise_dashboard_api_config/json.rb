@@ -33,7 +33,8 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
   end
 
   def api
-    sensu.select { |e| e['name'] == name }.first
+    return @api if @api
+    @api ||= sensu.select { |e| e['name'] == name }.first
   end
 
   # Public: Save changes to the API section of /etc/sensu/dashboard.json to disk.
@@ -48,7 +49,8 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
   end
 
   def pre_create
-    conf['sensu'] = []
+    conf['sensu'] ||= []
+    conf['sensu'][name] ||= {}
   end
 
   # Public: Remove the API configuration section.
