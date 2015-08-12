@@ -33,7 +33,7 @@ Puppet::Type.type(:sensu_enterprise_dashboard_api_config).provide(:json) do
   end
 
   def api
-    sensu[name]
+    sensu.select { |e| e['name'] == name }.first
   end
 
   # Public: Save changes to the API section of /etc/sensu/dashboard.json to disk.
